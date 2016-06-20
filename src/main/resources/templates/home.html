@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{^user}}
+<form action ="/login" method="post">
+    <input type="text" name="username" placeholder="Enter Your Name" autofocus/>
+    <button type="submit">Login</button>
+</form>
+{{/user}}
+
+{{#user}}
+Hello, {{name}}!
+<br>
+<form action ="/add-message" method="post">
+    <input type="text" name="text" placeholder="Type Your Message" autofocus/>
+    <button type="submit">Submit</button>
+</form>
+<br>
+<br>
+Messages by: {{name}}
+{{#message}}
+{{text}}
+{{/message}}
+
+<br>
+<br>
+<form action="/logout" method="post">
+    <button type="submit">Logout</button>
+    </form>
+{{/user}}
+
+</body>
+</html>
