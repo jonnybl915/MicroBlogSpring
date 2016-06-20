@@ -24,6 +24,7 @@ public class MicroBlogController {
         User user = null;
         if (username != null) {
             user = new User(username);
+
         }
         int id = 1;
         for (Message msg : messageList) {
@@ -50,7 +51,6 @@ public class MicroBlogController {
 
         Message msg = new Message(text);
         messageList.add(msg);
-        System.out.println(messageList);
         return "redirect:/";
     }
     @RequestMapping(path="/delete-message", method = RequestMethod.POST)
