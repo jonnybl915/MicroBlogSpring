@@ -48,9 +48,14 @@ public class MicroBlogController {
     @RequestMapping(path ="/add-message", method = RequestMethod.POST)
     public String addMessage(String text, HttpSession session) {
 
-        Message msg = new Message(text, messageList.size());
+        Message msg = new Message(text);
         messageList.add(msg);
         System.out.println(messageList);
+        return "redirect:/";
+    }
+    @RequestMapping(path="/delete-message", method = RequestMethod.POST)
+    public String deleteMessage(Integer id) {
+        messageList.remove(id-1);
         return "redirect:/";
     }
 }

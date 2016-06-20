@@ -27,7 +27,11 @@ Messages by: {{name}}
 {{#messageList}}
 
 <li>
-{{text}}
+{{text}} <form action="/delete-message" method="post" style="display: inline-block;">
+    <input type="hidden" name="id" value="{{id}}"/>
+    <button type="submit">Delete Message</button>
+</form>
+    <br>
 </li>
 
 {{/messageList}}
