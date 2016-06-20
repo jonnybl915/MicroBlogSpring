@@ -25,14 +25,13 @@ public class MicroBlogController {
         if (username != null) {
             user = new User(username);
         }
-        String text = (String) session.getAttribute("text");
-        Integer id = (Integer) session.getAttribute("id");
-        Message msg = null;
-        if(text != null) {
-            msg = new Message(text);
+        int id = 1;
+        for (Message msg : messageList) {
+            msg.id = id;
+            id++;
         }
         model.addAttribute("user", user);
-        model.addAttribute("text", text);
+        model.addAttribute("messageList", messageList);
 
         return "home";
     }
@@ -49,9 +48,9 @@ public class MicroBlogController {
     @RequestMapping(path ="/add-message", method = RequestMethod.POST)
     public String addMessage(String text, HttpSession session) {
 
-        session.setAttribute("text", text);
-        Message msg = new Message(text);
+        Message msg = new Message(text, messageList.size());
         messageList.add(msg);
+        System.out.println(messageList);
         return "redirect:/";
     }
 }

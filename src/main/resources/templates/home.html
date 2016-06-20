@@ -22,9 +22,16 @@ Hello, {{name}}!
 <br>
 <br>
 Messages by: {{name}}
-{{#message}}
+
+<ol>
+{{#messageList}}
+
+<li>
 {{text}}
-{{/message}}
+</li>
+
+{{/messageList}}
+</ol>
 
 <br>
 <br>

@@ -7,8 +7,8 @@ public class Message {
     String text;
     Integer id;
 
-    public Message(String text) {
+    public Message(String text, Integer id) {
         this.text = text;
-
+        this.id = id;
     }
 }
