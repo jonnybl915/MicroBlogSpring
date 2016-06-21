@@ -1,5 +1,6 @@
 package com.theironyard;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,32 +14,53 @@ import java.util.ArrayList;
  */
 @Controller
 public class MicroBlogController {
+    @Autowired
+    UserRepository users;
+    @Autowired
+    MessageRepository messages;
 
-    ArrayList<Message> messageList = new ArrayList<>();
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(Model model, HttpSession session) {
 
         String username = (String) session.getAttribute("username");
 
-        User user = null;
-        if (username != null) {
-            user = new User(username);
-
+        if (username == null) {
+            return "login";
         }
-        int id = 1;
-        for (Message msg : messageList) {
-            msg.id = id;
-            id++;
+        else {
+                Iterable<Message> msgs = messages.findAll();
+                model.addAttribute("messages", msgs);
+                model.addAttribute("name", username);
+                return "home";
         }
-        model.addAttribute("user", user);
-        model.addAttribute("messageList", messageList);
-
-        return "home";
     }
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public String login(String username, HttpSession session) {
+    public String login(String username, HttpSession session, String password) throws Exception {
+        User user = users.findByName(username);
+        if (user == null) {
+            user = new User(username, password);
+            users.save(user); //saves the created user object and inserts it into our table using our repository
+        }
+        else if (!user.password.equals(password)) {
+            throw new Exception("Wrong Password!");
+        }
+        else if(user.name.isEmpty() || user.password.isEmpty()) {        //**************
+            throw new Exception("You Must Type a Username & Password!!"); //****************
+        }
         session.setAttribute("username", username);
+        return "redirect:/";
+    }
+    @RequestMapping(path ="/add-message", method = RequestMethod.POST)
+    public String addMessage(String text, HttpSession session) {
+
+        Message msg = new Message(text);
+        messages.save(msg);
+        return "redirect:/";
+    }
+    @RequestMapping(path="/delete-message", method = RequestMethod.POST)
+    public String deleteMessage(Integer id) {
+        messages.delete(id);
         return "redirect:/";
     }
     @RequestMapping(path ="/logout", method = RequestMethod.POST)
@@ -46,16 +68,10 @@ public class MicroBlogController {
         session.invalidate();
         return "redirect:/";
     }
-    @RequestMapping(path ="/add-message", method = RequestMethod.POST)
-    public String addMessage(String text, HttpSession session) {
-
-        Message msg = new Message(text);
-        messageList.add(msg);
-        return "redirect:/";
-    }
-    @RequestMapping(path="/delete-message", method = RequestMethod.POST)
-    public String deleteMessage(Integer id) {
-        messageList.remove(id-1);
+    @RequestMapping(path ="/edit-message", method = RequestMethod.POST)
+    public String edit(Integer id, String text) {
+        Message message = new Message(id, text);
+        messages.save(message);
         return "redirect:/";
     }
 }

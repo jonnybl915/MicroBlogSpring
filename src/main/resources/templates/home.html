@@ -5,15 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-{{^user}}
-<form action ="/login" method="post">
-    <input type="text" name="username" placeholder="Enter Your Name" autofocus/>
-    <button type="submit">Login</button>
-</form>
-{{/user}}
+<h1>Welcome To Your Messages</h1>
 
-{{#user}}
-Hello, {{name}}!
 <br>
 <form action ="/add-message" method="post">
     <input type="text" name="text" placeholder="Type Your Message" autofocus/>
@@ -21,29 +14,36 @@ Hello, {{name}}!
 </form>
 <br>
 <br>
-Messages by: {{name}}
+{{name}}'s Messages:
 
 <ol>
-{{#messageList}}
+{{#messages}}
 
 <li>
 {{text}} <form action="/delete-message" method="post" style="display: inline-block;">
     <input type="hidden" name="id" value="{{id}}"/>
     <button type="submit">Delete Message</button>
 </form>
+    <form action="/edit-message" method="post" style="display: inline-block;">
+        <input type="text" name="text" placeholder="Edit Your Message"/>
+        <input type="hidden" name="id" value="{{id}}"/>
+        <button type="submit">Edit Message</button>
+
+    </form>
     <br>
 </li>
 <br>
 
-{{/messageList}}
+{{/messages}}
 </ol>
 
 <br>
 <br>
+
 <form action="/logout" method="post">
     <button type="submit">Logout</button>
-    </form>
-{{/user}}
+</form>
+
 
 </body>
 </html>
