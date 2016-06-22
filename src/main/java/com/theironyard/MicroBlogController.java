@@ -43,10 +43,10 @@ public class MicroBlogController {
             users.save(user); //saves the created user object and inserts it into our table using our repository
         }
         else if (!user.password.equals(password)) {
-            throw new Exception("Wrong Password!");
+            return "redirect:/";
         }
-        else if(user.name.isEmpty() || user.password.isEmpty()) {        //**************
-            throw new Exception("You Must Type a Username & Password!!"); //****************
+        else if(username.equals("") || password.equals("")) {        //**************STILL NOT WORKING
+            return "redirect:/";
         }
         session.setAttribute("username", username);
         return "redirect:/";
